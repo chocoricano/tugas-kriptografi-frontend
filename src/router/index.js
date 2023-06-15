@@ -25,6 +25,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue')
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegisterView.vue')
     }
   ]
 })
@@ -50,7 +55,7 @@ async function checkAuthStatus() {
 
   if (token) {
     try {
-      const response = await axios.get('http://localhost:5000/user', {
+      const response = await axios.get('https://103.175.218.179:8181/user', {
         headers: {
           'Authorization': 'Bearer ' + token
         }

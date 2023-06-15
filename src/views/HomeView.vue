@@ -1,54 +1,46 @@
 <template>
   <div>
-    <nav class="navbar navbar-light bg-light">
+    <nav class="navbar navbar-light" style="background-image: linear-gradient(to right, #1fa2ff, #12d8fa, #a6ffcb);">
       <div class="container-fluid">
-        <a class="navbar-brand">VueJS</a>
-        <form class="d-flex">
-          <div class="p-2">
-            <router-link to="/">Home</router-link>
-          </div>
-          <div class="p-2">
-            <router-link to="/about">About</router-link>
-          </div>
-          <div class="p-2">
-            <router-link to="/activity">Activity</router-link>
-          </div>
-          <div class="p-2">
-            <button v-if="isJwtExist" @click="handleLogout">Logout</button>
-            <router-link v-else to="/login">Login</router-link>
-          </div>
-        </form>
+        <div class="p-2 ml-auto">
+          <button @click="handleLogout" class="btn btn-danger">Logout</button>
+        </div>
       </div>
     </nav>
-  </div>
-  <div class="container py-5">
-    <div class="row">
-      <div class="col-md-6 mx-auto">
-        <div class="text-center mb-4">
-          <h1 class="display-4">Tokopedia Scraper</h1>
-        </div>
-        <form @submit.prevent="submitForm">
-          <div class="form-group">
-            <div class="input-group">
-              <input type="text" class="form-control" v-model="toko" placeholder="Enter Toko Name" autofocus>
-              <div class="input-group-append">
-                <button type="submit" class="btn btn-primary">Scrape</button>
-              </div>
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="text-center mb-4">
+            <h1 class="display-4">Tokopedia Scraper</h1>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <form @submit.prevent="submitForm">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" class="form-control" v-model="toko" placeholder="Enter Toko Name" autofocus>
+                    <div class="input-group-append">
+                      <button type="submit" class="btn btn-primary">Scrape</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
-        </form>
-        <div v-if="message" class="text-center">
-          <h2 class="mt-4">Response:</h2>
-          <p>{{ message }}</p>
-          <div class="btn-group mt-3 d-flex flex-wrap justify-content-center" role="group" aria-label="Download options">
-            <button @click="downloadFile(1)" class="btn btn-primary mx-2 my-1">Download as JSON</button>
-            <button @click="downloadFile(2)" class="btn btn-primary mx-2 my-1">Download as CSV</button>
+          <div v-if="message" class="text-center">
+            <h2 class="mt-4">Response:</h2>
+            <p>{{ message }}</p>
+            <div class="btn-group mt-3 d-flex flex-wrap justify-content-center" role="group" aria-label="Download options">
+              <button @click="downloadFile(1)" class="btn btn-success mx-2 my-1">Download as JSON</button>
+              <button @click="downloadFile(2)" class="btn btn-success mx-2 my-1">Download as CSV</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 
 <script setup lang="ts">
@@ -66,11 +58,13 @@ function isJwtExist() {
 function handleLogout() {
   localStorage.removeItem('jwt');
   // Perform any additional logout actions if needed
+  // Redirect the user
+  window.location.href = '/login';
 }
 
 async function submitForm() {
   try {
-    const response = await axios.post('http://8.219.195.118:8000/scrape', {
+    const response = await axios.post('https://103.175.218.179:8181/scrape', {
       toko: toko.value,
       file: 1,
       data: 1,
@@ -95,7 +89,7 @@ async function submitForm() {
 
 async function downloadFile(format) {
   try {
-    const response = await axios.post('http://8.219.195.118:8000/scrape', {
+    const response = await axios.post('https://103.175.218.179:8181/scrape', {
       toko: toko.value,
       file: 1,
       data: 1,
@@ -138,5 +132,14 @@ function jsonToCsv(json) {
 <style scoped>
 .container {
   height: 100vh;
+}
+
+.navbar {
+  border-bottom: 1px solid #ddd;
+}
+
+.card {
+  border-radius: 15px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 </style>
